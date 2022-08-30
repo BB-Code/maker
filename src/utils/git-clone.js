@@ -1,5 +1,5 @@
 import { message  } from 'antd';
-import download from 'download-git-repo';
+const download = require('download-git-repo');
 
 function cloneGit(repo,path){
     

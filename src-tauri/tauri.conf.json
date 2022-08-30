@@ -4,15 +4,95 @@
     "beforeBuildCommand": "yarn build",
     "beforeDevCommand": "yarn start",
     "devPath": "http://localhost:4000",
-    "distDir": "../build"
+    "distDir": "../build",
+    "withGlobalTauri":true
   },
   "package": {
     "productName": "maker",
-    "version": "0.0.1"
+    "version": "0.0.3"
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "http": {
+        "all": true, 
+        "request": true 
+      },
+      "shell": {
+        "all": true, 
+        "execute": true,
+        "sidecar": true, 
+        "open": true,
+        "scope":[
+          { 
+            "name": "bash", 
+            "cmd": "powershell", 
+            "args": true
+          },
+          {
+            "name": "run-git-clone",
+            "cmd": "git",
+            "args": true
+          }
+        ]
+      },
+      "fs": {
+        "all": true, 
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "copyFile": true,
+        "createDir": true,
+        "removeDir": true,
+        "removeFile": true,
+        "renameFile": true
+      },
+      "os": {
+        "all": true
+      },
+      "dialog": {
+        "all": true, 
+        "open": true, 
+        "save": true 
+      },
+      "notification": {
+        "all": true 
+      },
+      "path": {
+        "all": true
+      },
+      "process":{
+        "all": true,
+        "exit": true,
+        "relaunch": true,
+        "relaunchDangerousAllowSymlinkMacos": true
+      },
+      "window": {
+        "all": true, 
+        "create": true, 
+        "center": true,
+        "requestUserAttention": true,
+        "setResizable": true,
+        "setTitle": true,
+        "maximize": true,
+        "unmaximize": true,
+        "minimize": true,
+        "unminimize": true,
+        "show": true,
+        "hide": true,
+        "close": true,
+        "setDecorations": true,
+        "setAlwaysOnTop": true,
+        "setSize": true,
+        "setMinSize": true,
+        "setMaxSize": true,
+        "setPosition": true,
+        "setFullscreen": true,
+        "setFocus": true,
+        "setIcon": true,
+        "setSkipTaskbar": true,
+        "startDragging": true,
+        "print": true
+      }
     },
     "bundle": {
       "active": true,
@@ -59,8 +139,11 @@
         "height": 800,
         "resizable": true,
         "title": "制造者",
-        "width": 1000
+        "width": 1000,
+        "center": true,
+        "theme":"Light"
       }
     ]
+    
   }
 }
