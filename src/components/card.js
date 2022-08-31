@@ -1,12 +1,17 @@
-import React, { useRef } from 'react'
-import { Image, Button, message, Modal } from 'antd';
+import React, { useRef, useState } from 'react'
+import { Image, Button, message, Modal, Drawer } from 'antd';
 import { ProCard, ProForm, ProFormText } from '@ant-design/pro-components';
 import { Command } from '@tauri-apps/api/shell'
-import { templateUrl } from '../config';
-import { showLoading,hideLoading } from './loading';
+import { templateUrl,imageUrl } from '../config';
+import { showLoading, hideLoading } from './loading';
+import { getStore, saveProjectNames } from '../utils/store';
+import ProjectList from '../components/projectList';
+
 export default function Card() {
     let ref = useRef();
-    const createTemplate = (template) => {
+    let [visible, setVisible] = useState(false);
+    let [prefixName, setPrefixName] = useState('');
+    const createTemplate = (prefix, template) => {
         Modal.confirm({
             title: '项目信息',
             closable: true,
@@ -17,14 +22,20 @@ export default function Card() {
             centered: true,
             content: <ProForm formRef={ref} submitter={false}>
                 <ProFormText name='projectName' label="项目名" placeholder='请输入项目名' required></ProFormText>
+                <ProFormText name='projectDesc' label="项目描述" placeholder='请输入项目描述' ></ProFormText>
             </ProForm>,
             onOk: () => {
                 if (!ref.current.getFieldValue('projectName')) {
                     message.info('请输入项目名称!')
                     return true;
                 } else {
-                    showLoading();
-                    new Command('run-git-clone', ['clone', template, localStorage.getItem('dir') + `\\${ref.current.getFieldValue('projectName')}`]).execute().then(result => {
+                    // 保存项目名称
+                    saveProjectNames(prefix, 'ProjectNameList', {
+                        title: ref.current.getFieldValue('projectName'),
+                        desc: ref.current.getFieldValue('projectDesc')
+                    })
+                    showLoading('下载中...');
+                    new Command('run-git-clone', ['clone', template, getStore('dir') + `\\${ref.current.getFieldValue('projectName')}`]).execute().then(result => {
                         hideLoading();
                         if (result.code === 0) {
                             message.success('下载成功');
@@ -41,37 +52,70 @@ export default function Card() {
             }
         })
     }
+    const onClose = () => {
+        setVisible(false);
+    }
     return (
         <div id='container'>
             <ProCard gutter={8}>
                 <ProCard title="React" tooltip={'基于 create-react-app new [appname] 创建应用'} extra={
-                    <Button type='ghost' onClick={async () => {
-                        createTemplate(templateUrl.react_template)
-                    }}>创建</Button>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row'
+                    }}>
+                        <Button type='ghost' onClick={async () => {
+                            createTemplate('react', templateUrl.react_template)
+                        }}>创建</Button>
+                        <Button type='primary' onClick={() => {
+                            setVisible(true);
+                            setPrefixName('react');
+                        }}>列表</Button>
+                    </div>
                 } colSpan={8} layout="center" bordered>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 160 }}>
-                        <Image preview={false} width={100} height={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
+                        <Image preview={false} width={100} height={100} src={imageUrl.react_img} />
                     </div>
                 </ProCard>
                 <ProCard title="Vue3" tooltip={'基于  npm init vue@latest 创建应用'} extra={
-                    <Button type='ghost' onClick={async () => {
-                        createTemplate(templateUrl.vue2_template)
-                    }}>创建</Button>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row'
+                    }}>
+                        <Button type='ghost' onClick={async () => {
+                            createTemplate('vue2', templateUrl.vue2_template)
+                        }}>创建</Button>
+                        <Button type='primary' onClick={() => {
+                            setVisible(true);
+                            setPrefixName('vue2');
+                        }}>列表</Button>
+                    </div>
                 } colSpan={8} layout="center" bordered>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 160 }}>
-                        <Image preview={false} src="https://blog-img-1252233196.cos.ap-guangzhou.myqcloud.com/vue.svg" />
+                        <Image preview={false} src={imageUrl.vue2_img} />
                     </div>
                 </ProCard>
                 <ProCard title="Express" tooltip={'基于  express-generator 创建应用'} extra={
-                    <Button type='ghost' onClick={async () => {
-                        createTemplate(templateUrl.express_template)
-                    }}>创建</Button>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row'
+                    }}>
+                        <Button type='ghost' onClick={async () => {
+                            createTemplate('express', templateUrl.express_template)
+                        }}>创建</Button>
+                        <Button type='primary' onClick={() => {
+                            setVisible(true);
+                            setPrefixName('express');
+                        }}>列表</Button>
+                    </div>
                 } colSpan={8} layout="center" bordered>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 160 }}>
-                        <Image preview={false} src="https://blog-img-1252233196.cos.ap-guangzhou.myqcloud.com/expess.png" />
+                        <Image preview={false} src={imageUrl.express_img} />
                     </div>
                 </ProCard>
             </ProCard>
+            <Drawer title="项目列表" placement="right" onClose={onClose} visible={visible}>
+                <ProjectList prefix={prefixName} />
+            </Drawer>
         </div>
     )
 }

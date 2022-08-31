@@ -29,6 +29,11 @@
             "args": true
           },
           {
+            "name": "explorer",
+            "cmd":"explorer",
+            "args": true
+          },
+          {
             "name": "run-git-clone",
             "cmd": "git",
             "args": true

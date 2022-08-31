@@ -9,9 +9,9 @@ import './App.css';
 //const download = require('download-git-repo')
 //const clone = require('git-clone');
 import { platform } from '@tauri-apps/api/os';
-import { Command } from '@tauri-apps/api/shell'
-import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/api/notification';
-import { appDir, desktopDir, downloadDir, configDir, homeDir, dataDir } from '@tauri-apps/api/path';
+// import { Command } from '@tauri-apps/api/shell'
+// import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/api/notification';
+// import { appDir, desktopDir, downloadDir, configDir, homeDir, dataDir } from '@tauri-apps/api/path';
 import { checkUpdate, installUpdate } from '@tauri-apps/api/updater';
 import { exit } from '@tauri-apps/api/process';
 import { useEffect } from 'react';
@@ -65,13 +65,14 @@ function App() {
 notification
 </button> */}
       <ProLayout
+      collapsed={true}
         route={{
           path: '/',
           routes: [
             {
               path: '/',
               name: '首页',
-              icon: <HomeFilled />
+              icon: <HomeFilled />,
             },
             {
               path: '/settings',

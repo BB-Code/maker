@@ -4,13 +4,13 @@ import { Spin } from 'antd';
 let requestCount = 0
 
 // 显示loading
-function showLoading () {
+function showLoading (tip) {
   if (requestCount === 0) {
       var dom = document.createElement('div')
       dom.setAttribute('id', 'loading')
       document.body.appendChild(dom)
       const root = ReactDOM.createRoot(dom);
-      root.render(<Spin tip="下载中..." size="large"/>)
+      root.render(<Spin tip={tip} size="large"/>)
   }
   requestCount++
 }
