@@ -3,7 +3,7 @@
   "build": {
     "beforeBuildCommand": "yarn build",
     "beforeDevCommand": "yarn start",
-    "devPath": "http://localhost:4000",
+    "devPath": "http://localhost:3000",
     "distDir": "../build",
     "withGlobalTauri":true
   },
@@ -24,13 +24,23 @@
         "open": true,
         "scope":[
           { 
-            "name": "bash", 
+            "name": "powershell", 
             "cmd": "powershell", 
+            "args": true
+          },
+          { 
+            "name": "bash", 
+            "cmd": "bash", 
             "args": true
           },
           {
             "name": "explorer",
             "cmd":"explorer",
+            "args": true
+          },
+          {
+            "name": "macOpen",
+            "cmd":"open",
             "args": true
           },
           {

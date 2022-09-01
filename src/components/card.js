@@ -6,6 +6,7 @@ import { templateUrl,imageUrl } from '../config';
 import { showLoading, hideLoading } from './loading';
 import { getStore, saveProjectNames } from '../utils/store';
 import ProjectList from '../components/projectList';
+import {isDarwin} from '../utils/platform';
 
 export default function Card() {
     let ref = useRef();
@@ -35,19 +36,38 @@ export default function Card() {
                         desc: ref.current.getFieldValue('projectDesc')
                     })
                     showLoading('下载中...');
-                    new Command('run-git-clone', ['clone', template, getStore('dir') + `\\${ref.current.getFieldValue('projectName')}`]).execute().then(result => {
-                        hideLoading();
-                        if (result.code === 0) {
-                            message.success('下载成功');
-                            return false;
-                        } else if (result.code === 128) {
-                            message.error('项目已经存在');
-                            return true;
-                        } else {
-                            message.info(result.stderr)
-                            return true;
+                    isDarwin().then(res=>{
+                        if(res){
+                            new Command('run-git-clone', ['clone', template, getStore('dir') + `/${ref.current.getFieldValue('projectName')}`]).execute().then(result => {
+                                hideLoading();
+                                if (result.code === 0) {
+                                    message.success('下载成功');
+                                    return false;
+                                } else if (result.code === 128) {
+                                    message.error('项目已经存在');
+                                    return true;
+                                } else {
+                                    message.info(result.stderr)
+                                    return true;
+                                }
+                            })
+                        }else{
+                            new Command('run-git-clone', ['clone', template, getStore('dir') + `\\${ref.current.getFieldValue('projectName')}`]).execute().then(result => {
+                                hideLoading();
+                                if (result.code === 0) {
+                                    message.success('下载成功');
+                                    return false;
+                                } else if (result.code === 128) {
+                                    message.error('项目已经存在');
+                                    return true;
+                                } else {
+                                    message.info(result.stderr)
+                                    return true;
+                                }
+                            })
                         }
                     })
+                    
                 }
             }
         })

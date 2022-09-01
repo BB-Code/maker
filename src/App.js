@@ -8,15 +8,15 @@ import Card from './components/card';
 import './App.css';
 //const download = require('download-git-repo')
 //const clone = require('git-clone');
-import { platform } from '@tauri-apps/api/os';
-// import { Command } from '@tauri-apps/api/shell'
-// import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/api/notification';
-// import { appDir, desktopDir, downloadDir, configDir, homeDir, dataDir } from '@tauri-apps/api/path';
+import {isDarwin} from './utils/platform';
+import { Command } from '@tauri-apps/api/shell'
+import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/api/notification';
+import { appDir, desktopDir, downloadDir, configDir, homeDir, dataDir } from '@tauri-apps/api/path';
 import { checkUpdate, installUpdate } from '@tauri-apps/api/updater';
 import { exit } from '@tauri-apps/api/process';
 import { useEffect } from 'react';
 
-platform().then(res => {
+isDarwin().then(res => {
   console.log("🚀 ~ file: App.js ~ line 13 ~ platformName", res)
 });
 
@@ -35,7 +35,7 @@ function App() {
   }, [])
   return (
     <div id="pro-layout" style={{ height: '100vh' }}>
-      {/* <button onClick={async()=>{
+      <button onClick={async()=>{
         //const appDirPath = await appDir();
         //console.log("🚀 ~ file: App.js ~ line 63 ~ <buttononClick={async ~ appDirPath", appDirPath)
         //C:\Users\Administrator\AppData\Roaming\com.tauri.bobocode\
@@ -51,6 +51,7 @@ function App() {
     onClick={async() => {
       
       let permissionGranted = await isPermissionGranted();
+      console.log(permissionGranted)
       //console.log("🚀 ~ file: App.js ~ line 146 ~ onClick={async ~ permissionGranted", permissionGranted)
       // if (!permissionGranted) {
       //   const permission = await requestPermission();
@@ -63,7 +64,7 @@ function App() {
     }}
 >
 notification
-</button> */}
+</button>
       <ProLayout
       collapsed={true}
         route={{

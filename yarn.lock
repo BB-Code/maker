@@ -1958,9 +1958,9 @@
   "resolved" "https://registry.npmjs.org/@tauri-apps/api/-/api-1.0.2.tgz"
   "version" "1.0.2"
 
-"@tauri-apps/cli-win32-x64-msvc@1.0.5":
-  "integrity" "sha512-8iEhVD3X4LZfrlxEPOV+mAj4QrJrEqKTICiJnwmgjvhYQOOsNHzg5kca7pcBbqcgorQOBydLpfGJtxWRusVPaw=="
-  "resolved" "https://registry.npmjs.org/@tauri-apps/cli-win32-x64-msvc/-/cli-win32-x64-msvc-1.0.5.tgz"
+"@tauri-apps/cli-darwin-x64@1.0.5":
+  "integrity" "sha512-hRNYC6L9edz2dEqK33tssPylF2ti6x6udidBlGWc5GSoeEb/05qKMEA1MESQYKBG+4q+wjJvACA2vvz6AfgJ3Q=="
+  "resolved" "https://registry.npmjs.org/@tauri-apps/cli-darwin-x64/-/cli-darwin-x64-1.0.5.tgz"
   "version" "1.0.5"
 
 "@tauri-apps/cli@^1.0.5":
