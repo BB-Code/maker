@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Button, List, message, Modal } from "antd";
 import { getStore } from "../utils/store";
 import { Child, Command } from "@tauri-apps/api/shell";
@@ -8,12 +8,14 @@ import { imageUrl } from "../config";
 import { isDarwin } from "../utils/platform";
 
 export default function ProjectList(props) {
-  let dataSource;
-  if (!getStore(props.prefix + "ProjectNameList")) {
-    dataSource = [];
-  } else {
-    dataSource = JSON.parse(getStore(props.prefix + "ProjectNameList"));
-  }
+  let [dataSource,setDataSource] = useState([]);
+  useEffect(()=>{
+    if (!getStore(props.prefix + "ProjectNameList")) {
+      setDataSource([])
+    } else {
+      setDataSource(JSON.parse(getStore(props.prefix + "ProjectNameList")))
+    }
+  },[dataSource])
   return (
     <List
       itemLayout="horizontal"
@@ -48,6 +50,7 @@ export default function ProjectList(props) {
                         }
                       });
                   } else {
+                    console.log(getStore("dir") + `\\${item.title}`)
                     new Command("explorer", [
                       getStore("dir") + `\\${item.title}`,
                     ])
@@ -87,38 +90,38 @@ export default function ProjectList(props) {
                 //     ]).execute();
                 //     console.log(chmod);
                 //     if (chmod.code === 0) {
-                      let res = await new Command("bash", [
-                        "rm",
-                        "-r",
-                        getStore("dir") + `${item.title}`,
-                      ]).execute();
-                      if (res.code === 0) {
-                        message.success("删除成功");
-                        rmStoreData(
-                          props.prefix + "ProjectNameList",
-                          item.title
-                        );
-                        return false;
-                      } else {
-                        message.error(res.stderr);
-                        return true;
-                      }
-                    }
+                    //   let res = await new Command("bash", [
+                    //     "rm",
+                    //     "-r",
+                    //     getStore("dir") + `${item.title}`,
+                    //   ]).execute();
+                    //   if (res.code === 0) {
+                    //     message.success("删除成功");
+                    //     rmStoreData(
+                    //       props.prefix + "ProjectNameList",
+                    //       item.title
+                    //     );
+                    //     return false;
+                    //   } else {
+                    //     message.error(res.stderr);
+                    //     return true;
+                    //   }
+                    // }
                 //   } else {
-                //     let res = await new Command("powershell", [
-                //       "rmdir",
-                //       "-r",
-                //       getStore("dir") + `\\${item.title}`,
-                //     ]).execute();
-                //     if (res.code === 0) {
-                //       message.success("删除成功");
-                //       rmStoreData(props.prefix + "ProjectNameList", item.title);
-                //       return false;
-                //     } else {
-                //       message.error(res.stderr);
-                //       return true;
-                //     }
-                //   }
+                    let res = await new Command("powershell", [
+                      "rmdir",
+                      "-r",
+                      getStore("dir") + `\\${item.title}`,
+                    ]).execute();
+                    if (res.code === 0) {
+                      message.success("删除成功");
+                      rmStoreData(props.prefix + "ProjectNameList", item.title);
+                      return false;
+                    } else {
+                      message.error(res.stderr);
+                      return true;
+                    }
+                  }
                 //},
               });
             }}

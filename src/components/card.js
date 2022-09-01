@@ -2,17 +2,21 @@ import React, { useRef, useState } from 'react'
 import { Image, Button, message, Modal, Drawer } from 'antd';
 import { ProCard, ProForm, ProFormText } from '@ant-design/pro-components';
 import { Command } from '@tauri-apps/api/shell'
-import { templateUrl,imageUrl } from '../config';
+import { templateUrl, imageUrl } from '../config';
 import { showLoading, hideLoading } from './loading';
 import { getStore, saveProjectNames } from '../utils/store';
 import ProjectList from '../components/projectList';
-import {isDarwin} from '../utils/platform';
+import { isDarwin } from '../utils/platform';
 
 export default function Card() {
     let ref = useRef();
     let [visible, setVisible] = useState(false);
     let [prefixName, setPrefixName] = useState('');
     const createTemplate = (prefix, template) => {
+        if (!getStore('dir')) {
+            message.info('请设置项目保存路劲');
+            return;
+        }
         Modal.confirm({
             title: '项目信息',
             closable: true,
@@ -36,9 +40,10 @@ export default function Card() {
                         desc: ref.current.getFieldValue('projectDesc')
                     })
                     showLoading('下载中...');
-                    isDarwin().then(res=>{
-                        if(res){
-                            new Command('run-git-clone', ['clone', template, getStore('dir') + `/${ref.current.getFieldValue('projectName')}`]).execute().then(result => {
+                    let projectPath = getStore('dir') + `/${ref.current.getFieldValue('projectName')}`
+                    isDarwin().then(res => {
+                        if (res) {
+                            new Command('run-git-clone', ['clone', template, projectPath]).execute().then(result => {
                                 hideLoading();
                                 if (result.code === 0) {
                                     message.success('下载成功');
@@ -51,8 +56,8 @@ export default function Card() {
                                     return true;
                                 }
                             })
-                        }else{
-                            new Command('run-git-clone', ['clone', template, getStore('dir') + `\\${ref.current.getFieldValue('projectName')}`]).execute().then(result => {
+                        } else {
+                            new Command('run-git-clone', ['clone', template, projectPath]).execute().then(result => {
                                 hideLoading();
                                 if (result.code === 0) {
                                     message.success('下载成功');
@@ -67,7 +72,7 @@ export default function Card() {
                             })
                         }
                     })
-                    
+
                 }
             }
         })
