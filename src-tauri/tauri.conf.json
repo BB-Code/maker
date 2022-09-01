@@ -29,8 +29,8 @@
             "args": true
           },
           { 
-            "name": "bash", 
-            "cmd": "bash", 
+            "name": "rm", 
+            "cmd": "rm", 
             "args": true
           },
           {

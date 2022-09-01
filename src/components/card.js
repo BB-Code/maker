@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState,useEffect } from 'react'
 import { Image, Button, message, Modal, Drawer } from 'antd';
 import { ProCard, ProForm, ProFormText } from '@ant-design/pro-components';
 import { Command } from '@tauri-apps/api/shell'
@@ -12,6 +12,14 @@ export default function Card() {
     let ref = useRef();
     let [visible, setVisible] = useState(false);
     let [prefixName, setPrefixName] = useState('');
+    let [dataSource,setDataSource] = useState([]);
+    useEffect(()=>{
+      if (!getStore(prefixName + "ProjectNameList")) {
+        setDataSource([])
+      } else {
+        setDataSource(JSON.parse(getStore(prefixName + "ProjectNameList")))
+      }
+    },[visible])
     const createTemplate = (prefix, template) => {
         if (!getStore('dir')) {
             message.info('请设置项目保存路劲');
@@ -37,7 +45,8 @@ export default function Card() {
                     // 保存项目名称
                     saveProjectNames(prefix, 'ProjectNameList', {
                         title: ref.current.getFieldValue('projectName'),
-                        desc: ref.current.getFieldValue('projectDesc')
+                        desc: ref.current.getFieldValue('projectDesc'),
+                        ctime: new Date().toLocaleString()
                     })
                     showLoading('下载中...');
                     let projectPath = getStore('dir') + `/${ref.current.getFieldValue('projectName')}`
@@ -139,7 +148,7 @@ export default function Card() {
                 </ProCard>
             </ProCard>
             <Drawer title="项目列表" placement="right" onClose={onClose} visible={visible}>
-                <ProjectList prefix={prefixName} />
+                <ProjectList prefix={prefixName} dataSource={dataSource} setDataSource={setDataSource}/>
             </Drawer>
         </div>
     )

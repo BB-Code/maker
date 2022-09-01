@@ -103,6 +103,7 @@ notification
                 let modal = Modal.info({
                   closable: true,
                   maskClosable: false,
+                  centered:true,
                   okButtonProps: {
                     style: {
                       display: 'none'

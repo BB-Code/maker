@@ -28,6 +28,7 @@ function rmStoreData(key,rmTitle){
             let currentData = JSON.parse(localStorage.getItem(key))
             let handlerData = currentData.filter(item=>item.title !== rmTitle)
             setStore(key,JSON.stringify(handlerData))
+            return handlerData
         }
     }else{
         return false
