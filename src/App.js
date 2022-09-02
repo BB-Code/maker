@@ -3,7 +3,7 @@
 import { message, Modal } from 'antd';
 import { SettingFilled, HomeFilled, CloseCircleFilled } from '@ant-design/icons';
 import tools from './images/tools.png';
-import { ProLayout, PageContainer, ProForm, ProFormText, ProFormSwitch } from '@ant-design/pro-components';
+import { ProLayout, PageContainer, ProForm, ProFormText, ProFormSwitch, ProFormRadio } from '@ant-design/pro-components';
 import Card from './components/card';
 import './App.css';
 //const download = require('download-git-repo')
@@ -123,6 +123,7 @@ notification
                       onFinish={async (values) => {
                         console.log(values)
                         setStore('isAuto', values.isAuto);
+                        setStore('source', values.source);
                         if (!values.savePath) {
                           message.info('请输入项目保存路径');
                           return;
@@ -139,6 +140,16 @@ notification
                       }}>
                       <ProFormText initialValue={localStorage.getItem('dir') ?? ''} name='savePath' label='项目保存路径' required placeholder='项目保存路径'></ProFormText>
                       <ProFormSwitch label="是否自动化安装" initialValue={true} name='isAuto' />
+                      <ProFormRadio.Group                 
+                      name='source'
+                      label='项目源'
+                      valueEnum={{
+                        "npm": "npm",
+                        "yarn": "yarn",
+                      }}
+                      initialValue={"npm"}
+                      />
+                      
                     </ProForm>
                   </>,
                 })

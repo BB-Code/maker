@@ -59,7 +59,7 @@ export default function Card() {
                             message.success('下载成功');
                             if (getStore('isAuto')) {
                                 showLoading('npm install 中...')
-                                new Command("powershell", ['Set-Location', '-Path', "F:/demos/demo2", ';', 'npm', 'install']).execute().then(async (res) => {
+                                new Command("powershell", ['Set-Location', '-Path', projectPath, ';', 'npm', 'install']).execute().then(async (res) => {
                                     if (res.code === 0) {
                                         hideLoading();
                                         //通知
@@ -67,7 +67,7 @@ export default function Card() {
                                         if (permissionGranted) {
                                             sendNotification({ title: '项目安装步骤', body: 'npm install 完成!' });
                                             showLoading('npm run start 中...');
-                                            let result = await new Command("powershell", ['Set-Location', '-Path', "F:/demos/demo2", ';', 'npm', 'run', 'start']).execute();
+                                            let result = await new Command("powershell", ['Set-Location', '-Path', projectPath, ';', 'npm', 'run', 'start']).execute();
                                             hideLoading();
                                             if (result.code === 0) {
                                                 if (permissionGranted) {
