@@ -3,19 +3,19 @@
 import { message, Modal } from 'antd';
 import { SettingFilled, HomeFilled, CloseCircleFilled } from '@ant-design/icons';
 import tools from './images/tools.png';
-import { ProLayout, PageContainer, ProForm, ProFormText } from '@ant-design/pro-components';
+import { ProLayout, PageContainer, ProForm, ProFormText, ProFormSwitch } from '@ant-design/pro-components';
 import Card from './components/card';
 import './App.css';
 //const download = require('download-git-repo')
 //const clone = require('git-clone');
-import {isDarwin} from './utils/platform';
+import { isDarwin } from './utils/platform';
 // import { Command } from '@tauri-apps/api/shell'
 // import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/api/notification';
 // import { appDir, desktopDir, downloadDir, configDir, homeDir, dataDir } from '@tauri-apps/api/path';
 import { checkUpdate, installUpdate } from '@tauri-apps/api/updater';
 import { exit } from '@tauri-apps/api/process';
 import { useEffect } from 'react';
-import {setStore} from './utils/store';
+import { setStore } from './utils/store';
 
 isDarwin().then(res => {
   console.log("🚀 ~ file: App.js ~ line 13 ~ platformName", res)
@@ -50,7 +50,6 @@ function App() {
       }}>目录</button>
        <button
     onClick={async() => {
-      
       let permissionGranted = await isPermissionGranted();
       console.log(permissionGranted)
       //console.log("🚀 ~ file: App.js ~ line 146 ~ onClick={async ~ permissionGranted", permissionGranted)
@@ -67,7 +66,7 @@ function App() {
 notification
 </button> */}
       <ProLayout
-      collapsed={true}
+        collapsed={true}
         route={{
           path: '/',
           routes: [
@@ -88,7 +87,7 @@ notification
             }
           ],
         }}
-        logo={tools} title='制作者' navTheme='light'
+        logo={tools} title='Maker' navTheme='light'
         // rightContentRender={() => (
         //   <Avatar shape="circle" icon={<SettingFilled />} onClick={() => {
         //     // 弹窗
@@ -103,7 +102,7 @@ notification
                 let modal = Modal.info({
                   closable: true,
                   maskClosable: false,
-                  centered:true,
+                  centered: true,
                   okButtonProps: {
                     style: {
                       display: 'none'
@@ -122,24 +121,26 @@ notification
                         resetButtonProps: { style: { display: 'none' } }
                       }}
                       onFinish={async (values) => {
+                        console.log(values)
+                        setStore('isAuto', values.isAuto);
                         if (!values.savePath) {
                           message.info('请输入项目保存路径');
                           return;
                         } else {
-                          let  isHasEnd = values.savePath.endsWith('\\');
-                          if(isHasEnd){
-                              setStore('dir',values.savePath.substr(0,values.savePath.length-1))
-                          }else{
-                            setStore('dir',values.savePath)
+                          let isHasEnd = values.savePath.endsWith('\\');
+                          if (isHasEnd) {
+                            setStore('dir', values.savePath.substr(0, values.savePath.length - 1))
+                          } else {
+                            setStore('dir', values.savePath)
                           }
                           message.info('保存成功');
                           modal.destroy();
                         }
                       }}>
                       <ProFormText initialValue={localStorage.getItem('dir') ?? ''} name='savePath' label='项目保存路径' required placeholder='项目保存路径'></ProFormText>
+                      <ProFormSwitch label="是否自动化安装" initialValue={true} name='isAuto' />
                     </ProForm>
                   </>,
-
                 })
               }
               if (item.path === '/close') {
@@ -149,7 +150,6 @@ notification
             }}
           >
             {dom}
-
           </a>
         )}
       >

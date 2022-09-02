@@ -31,6 +31,5 @@ const proCardList = [
         }
 ]
 
-console.log(proCardList);
 
 export  default proCardList;

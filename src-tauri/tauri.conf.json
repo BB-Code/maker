@@ -3,7 +3,7 @@
   "build": {
     "beforeBuildCommand": "yarn build",
     "beforeDevCommand": "yarn start",
-    "devPath": "http://localhost:3000",
+    "devPath": "http://localhost:4000",
     "distDir": "../build",
     "withGlobalTauri":true
   },
@@ -31,6 +31,21 @@
           { 
             "name": "rm", 
             "cmd": "rm", 
+            "args": true
+          },
+          { 
+            "name": "cd", 
+            "cmd": "cd", 
+            "args": true
+          },
+          { 
+            "name": "npm", 
+            "cmd": "npm", 
+            "args": true
+          },
+          { 
+            "name": "yarn", 
+            "cmd": "yarn", 
             "args": true
           },
           {
@@ -153,7 +168,7 @@
         "fullscreen": false,
         "height": 800,
         "resizable": true,
-        "title": "制造者",
+        "title": "Maker",
         "width": 1000,
         "center": true,
         "theme":"Light"

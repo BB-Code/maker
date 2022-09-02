@@ -8,7 +8,6 @@ import { imageUrl } from "../config";
 import { isDarwin } from "../utils/platform";
 
 export default function ProjectList(props) {
-  console.log(props);
   return (
     <List
       bordered={true}
@@ -31,10 +30,7 @@ export default function ProjectList(props) {
                 onOk: async () => {
                   let isMac = await isDarwin();
                   if (isMac) {
-                    let res = await new Command("rm", [
-                      "-rf",
-                      getStore("dir") + `${item.title}`,
-                    ]).execute();
+                    let res = await new Command("rm", ["-rf",getStore("dir") + `${item.title}`,]).execute();
                     if (res.code === 0) {
                       message.success("删除成功");
                       let handlerData = rmStoreData(
