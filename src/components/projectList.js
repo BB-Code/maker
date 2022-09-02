@@ -81,11 +81,13 @@ export default function ProjectList(props) {
               <Avatar
                 shape="circle"
                 src={
-                  props.prefix === "react"
+                    props.prefix === "react"
                     ? imageUrl.react_img
                     : props.prefix === "vue2"
                     ? imageUrl.vue2_img
-                    : imageUrl.express_img
+                    : props.prefix === "express"
+                    ? imageUrl.express_img
+                    : imageUrl.node_img
                 }
               />
             }
@@ -122,7 +124,7 @@ export default function ProjectList(props) {
             }
             description={item?.desc ?? ""}
           />
-          <p>创建时间: {item?.ctime ?? ""}</p>
+          <p style={{width:'200px'}}>创建时间: {item?.ctime ?? ""}</p>
           
         </List.Item>
       )}

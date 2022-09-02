@@ -1,5 +1,5 @@
-import React, { useRef, useState,useEffect } from 'react'
-import { Image, Button, message, Modal, Drawer } from 'antd';
+import React, { useRef, useState, useEffect } from 'react'
+import { Image, Button, message, Modal, Drawer, Space } from 'antd';
 import { ProCard, ProForm, ProFormText } from '@ant-design/pro-components';
 import { Command } from '@tauri-apps/api/shell'
 import { templateUrl, imageUrl } from '../config';
@@ -7,19 +7,20 @@ import { showLoading, hideLoading } from './loading';
 import { getStore, saveProjectNames } from '../utils/store';
 import ProjectList from '../components/projectList';
 import { isDarwin } from '../utils/platform';
+import proCardList from '../mock';
 
 export default function Card() {
     let ref = useRef();
     let [visible, setVisible] = useState(false);
     let [prefixName, setPrefixName] = useState('');
-    let [dataSource,setDataSource] = useState([]);
-    useEffect(()=>{
-      if (!getStore(prefixName + "ProjectNameList")) {
-        setDataSource([])
-      } else {
-        setDataSource(JSON.parse(getStore(prefixName + "ProjectNameList")))
-      }
-    },[visible])
+    let [dataSource, setDataSource] = useState([]);
+    useEffect(() => {
+        if (!getStore(prefixName + "ProjectNameList")) {
+            setDataSource([])
+        } else {
+            setDataSource(JSON.parse(getStore(prefixName + "ProjectNameList")))
+        }
+    }, [visible])
     const createTemplate = (prefix, template) => {
         if (!getStore('dir')) {
             message.info('请设置项目保存路劲');
@@ -91,8 +92,33 @@ export default function Card() {
     }
     return (
         <div id='container'>
-            <ProCard gutter={8}>
-                <ProCard title="React" tooltip={'基于 create-react-app new [appname] 创建应用'} extra={
+            <ProCard gutter={[10,10]} wrap={true} type='inner'>
+                {
+                    proCardList?.map((item,index)=>{
+                        return (
+                            <ProCard key={item.id} title={item.title} tooltip={item.tooltip} extra={
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'row'
+                                }}>
+                                    <Button type='ghost' onClick={async () => {
+                                        createTemplate(item.title, item.templdate_url)
+                                    }}>创建</Button>
+                                    <Button type='primary' onClick={() => {
+                                        setVisible(true);
+                                        setPrefixName('node');
+                                    }}>列表</Button>
+                                </div>
+                            } colSpan={8} layout="center" bordered>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 160 }}>
+                                    <Image preview={false} width={100} height={100} src={item.img_url} />
+                                </div>
+                            </ProCard>
+                        )
+                    })
+                }
+
+                {/* <ProCard title="React" tooltip={'基于 create-react-app new [appname] 创建应用'} extra={
                     <div style={{
                         display: 'flex',
                         flexDirection: 'row'
@@ -145,10 +171,10 @@ export default function Card() {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 160 }}>
                         <Image preview={false} src={imageUrl.express_img} />
                     </div>
-                </ProCard>
+                </ProCard> */}
             </ProCard>
             <Drawer title="项目列表" placement="right" onClose={onClose} visible={visible}>
-                <ProjectList prefix={prefixName} dataSource={dataSource} setDataSource={setDataSource}/>
+                <ProjectList prefix={prefixName} dataSource={dataSource} setDataSource={setDataSource} />
             </Drawer>
         </div>
     )
