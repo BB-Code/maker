@@ -5,6 +5,11 @@
   font-family:LXG;
   src:url('./font/LXGWWenKai-Bold.ttf')
 }
+
+@font-face {
+  font-family: ChenYuluoyan;
+  src: url('./font/ChenYuluoyan-Thin.ttf');
+}
 body {
   margin: 0;
   font-family: LXG,-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
