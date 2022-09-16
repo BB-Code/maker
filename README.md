@@ -1,15 +1,4 @@
-# 拉取库
-
-https://github.com/TencentCloudBase/webify-templates
-
-```sh
-netstat -ano | findstr "5000"
-#  TCP    0.0.0.0:5000           0.0.0.0:0              LISTENING       61304
-taskkill /PID 61304 /f
-# 成功: 已终止 PID 为 61304 的进程
-```
-
-# TODO
+# Maker
 
 - [x] 项目初始化
 - [x] 添加 antd 样式库
